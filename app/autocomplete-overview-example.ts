@@ -19,8 +19,7 @@ export class State {
   selector: "[eshopDisplayAutoComplete]"
 })
 export class DisplayAutoCompleteDirective implements OnInit, OnDestroy {
-  displayCodeAndName = value =>
-    value ? `${value.population}-${value.name}` : "";
+  @Input("eshopDisplayAutoComplete") displayFn: (val: any) => string;
   unsubscribe$ = new Subject<void>();
 
   constructor(private control: NgControl) {}
@@ -54,7 +53,7 @@ export class DisplayAutoCompleteDirective implements OnInit, OnDestroy {
     console.log(formControl);
     console.log(value);
 
-    this.control.valueAccessor.writeValue(this.displayCodeAndName(value));
+    this.control.valueAccessor.writeValue(this.displayFn(value));
     formControl.patchValue(value, {
       emitEvent: false,
       emitModelToViewChange: false
@@ -130,7 +129,8 @@ export class AutocompleteOverviewExample {
     );
   }
 
-  
+  displayCodeAndName = value =>
+    value ? `${value.population}-${value.name}` : "";
 }
 
 /**  Copyright 2017 Google Inc. All Rights Reserved.
